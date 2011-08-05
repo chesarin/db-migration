@@ -1,0 +1,19 @@
+Setup of Ddlutils 1.0 with Ant tasks in order to migrate from derby db to mysql db.
+
+Requirements:
+A complete java runtime environment. This was tested with Java 1.6.0_26
+
+Usage:
+
+1.Edit the database name and location on the build.xml file for target
+name database-dump and import-db-to-mysql. The derby db and mysql drivers
+are included in the lib directory.
+
+2.Now you can call ant as follows in the current directory.
+$> ant database-dump
+This will create the db-schema.xml and data.xml files. 
+
+$>ant import-db-to-mysql
+This will create the schema on the mysql server and then load the data. 
+Note:You have to create the mysql database manually the rest will be taken care
+of this by import-db-to-mysql.

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="MigrateToDerby" basedir=".">
+
+	<path id="runtime-classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+			
+			<include name="**/*.zip"/>
+		</fileset>
+	</path>
+	
+	<target name="database-dump" description="Dumps db structure and data">
+		<taskdef name="databaseToDdl"
+			 classname="org.apache.ddlutils.task.DatabaseToDdlTask">
+			<classpath refid="runtime-classpath"/>
+
+		</taskdef>
+
+		<databaseToDdl modelName="MigrateTest">
+			<database url="jdbc:derby://host:1527/location-of-db" driverClassName="org.apache.derby.jdbc.ClientDriver"/>
+			<writeSchemaToFile outputFile="db-schema.xml"/>
+			<writeDataToFile outputFile="data.xml"/>
+		</databaseToDdl>
+	
+	</target>
+
+	<target name="import-db-to-mysql" description="Creates db and loads data">
+		<taskdef name="ddlToDatabase"
+			classname="org.apache.ddlutils.task.DdlToDatabaseTask">
+			<classpath refid="runtime-classpath"/>
+
+		</taskdef>
+		
+		<ddlToDatabase schemaFile="db-schema.xml">
+			<database url="jdbc:mysql://host:3306/dbname"
+				driverClassName="com.mysql.jdbc.Driver"
+				username="username"
+				password="password"/>
+			
+			<writeSchemaToDatabase/> 
+			<writeDataToDatabase datafile="data.xml"/> 
+
+		</ddlToDatabase>
+	</target>
+
+</project>
